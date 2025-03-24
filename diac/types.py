@@ -12,7 +12,10 @@ class IEC61499Converter:
     def determine_type(self, value):
         """Determine the IEC 61499 data type based on the value."""
         if isinstance(value, int) or value.isdigit():
-            return "INT"
+            if(int(value) > 32768):
+                return "DINT"
+            else:
+                return "INT"
         try:
             float(value)
             return "REAL"
