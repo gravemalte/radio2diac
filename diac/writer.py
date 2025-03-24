@@ -79,11 +79,11 @@ def create_interface(parameters: dict[str, str], is_input: bool, is_output: bool
 
     # Decide if socket or plug is needed
     if is_input > 0:
-        socket = AdapterDeclaration(name="DataIn", type_name="gnu_radio::GenericAdapter_COMPLEX",
+        socket = AdapterDeclaration(name="DataIn", type_name="gnu_radio::GenericAdapter_" + complex_or_real,
                                     comment="Socket for Adapter")
         interface_list.add_socket(socket)
     if is_output > 0:
-        plug = AdapterDeclaration(name="DataOut", type_name="gnu_radio::GenericAdapter_COMPLEX", comment="Plug for Adapter")
+        plug = AdapterDeclaration(name="DataOut", type_name="gnu_radio::GenericAdapter_" + complex_or_real, comment="Plug for Adapter")
         interface_list.add_plug(plug)
 
     return interface_list
