@@ -8,9 +8,8 @@ from diac.fb_network import FunctionBlockNetwork
 from diac.types import generate_complex_datatype_struct, IEC61499Converter
 from radio.block import Block
 
-
 def write_to_file(file_path, content):
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w+') as file:
         file.write(content)
 
 
@@ -59,14 +58,6 @@ def create_function_block(radio_block: Block):
 def create_interface(parameters: dict[str, str], is_input: bool, is_output: bool, complex_or_real: str):
     interface_list = InterfaceList()
 
-    # Create EventInputs
-    # req_event = Event(name="REQ", event_type="Event", comment="Normal Execution Request")
-    # interface_list.add_event_input(req_event)
-
-    # Create EventOutputs
-    # cnf_event = Event(name="CNF", event_type="Event", comment="Execution Confirmation")
-    # interface_list.add_event_output(cnf_event)
-
     # Convert the parameters to IEC61499 data types
     converter = IEC61499Converter(parameters)
     parameters = converter.convert()
@@ -93,7 +84,7 @@ def generate_fb_xml(parameters):
     fb = create_function_block(parameters)
     fb_xml = fb.to_xml()
     xml = ET.tostring(fb_xml, encoding='utf8', method='xml').decode()
-    # Search for utf8 and replace it with utf-8
+    # Search for utf8 and replace it with utf-8 due to how Eclipse 4diac reads the data
     xml = xml.replace("utf8", "utf-8")
     return xml, fb.name
 

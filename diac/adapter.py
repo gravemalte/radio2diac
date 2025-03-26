@@ -4,6 +4,8 @@ from xml.etree.ElementTree import SubElement, Element, tostring
 from diac.function_block import MetaData
 
 
+MAX_ARRAY_SIZE = 4096
+
 class AdapterType:
     def __init__(self):
         self.interface_list = []
@@ -47,7 +49,7 @@ class AdapterType:
             elif item[0] == "InputVar":
                 SubElement(input_vars_elem, "VarDeclaration", Name=item[1], Type=item[2], Comment=item[3])
             elif item[0] == "OutputVar":
-                SubElement(output_vars_elem, "VarDeclaration", Name=item[1], Type=item[2], Comment=item[3])
+                SubElement(output_vars_elem, "VarDeclaration", Name=item[1], Type=item[2], ArraySize="0.." + str(MAX_ARRAY_SIZE), Comment=item[3])
 
         service_elem = SubElement(parent, "Service", RightInterface="SOCKET", LeftInterface="PLUG",
                                   Comment="Adapter Interface")
@@ -69,7 +71,6 @@ def generate_generic_adapter(type_of_data: str):
         type_of_data = "gnu_radio::COMPLEX"
 
     adapter.add_event_output("CNF", "CNFD")
-    # TODO: Dynamic type
     adapter.add_output_var("CNFD", type_of_data, "Confirmation Data from Plug")
     adapter.add_service_sequence("request_confirm", [
         (("SOCKET", "REQ", "REQD"), ("PLUG", "REQ", "REQD")),
