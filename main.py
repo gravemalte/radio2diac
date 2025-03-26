@@ -3,7 +3,7 @@ import argparse
 from diac.writer import generate_fb_xml, write_to_file, generate_adapters, generate_fbn, replace_subappnetwork_in_file, \
     generate_complex_type
 from radio.parser import Parser
-from radio.utils import print_blocks, print_connections
+from radio.utils import print_blocks, print_connections, remove_file
 
 def main():
     args = argparse.ArgumentParser(
@@ -51,12 +51,13 @@ def main():
     fbn_file_content = generate_fbn(parsed, function_blocks_names)
 
     print("\nWriting Function block network to file...\n=====================")
-    file_name = args.fbn + "/fbn_gen.sys"
-    write_to_file(file_name, fbn_file_content)
+    fbn_file = args.fbn + "/fbn_gen.sys"
+    write_to_file(fbn_file, fbn_file_content)
 
     print("\nReplacing the function block network in the 4diac project file...\n=====================")
     replace_subappnetwork_in_file(args.diac, fbn_file_content)
 
+    remove_file(fbn_file)
 
 if __name__ == '__main__':
     main()

@@ -20,7 +20,6 @@ def check_file(file_path):
     except FileNotFoundError:
         return False
 
-
 def generate_complex_type(filepath):
     complex_struct = generate_complex_datatype_struct()
     write_to_file(filepath + '/COMPLEX.dtp', complex_struct)
